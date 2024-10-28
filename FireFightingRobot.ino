@@ -11,18 +11,18 @@
 #define ir_F A1
 #define ir_L A2
 #define pump A5
-int Speed = 160; // Write the duty cycle (0 to 255) for motor speed
+int Speed = 160; //Write the duty cycle (0 to 255) for motor speed
 
-// Servo and sensor settings
+//Servo and sensor settings
 Servo myServo;
 int s1, s2, s3;
 int baselineR, baselineF, baselineL;
 
 void setup() {
-    // Start serial communication for debugging
+    //Start serial communication for debugging
     Serial.begin(9600);
 
-    // Set pin modes
+    //Set pin modes
     pinMode(ir_R, INPUT);
     pinMode(ir_F, INPUT);
     pinMode(ir_L, INPUT);
@@ -34,14 +34,14 @@ void setup() {
     pinMode(enB, OUTPUT);
     pinMode(pump, OUTPUT);
     
-    // Attach servo to pin A4
+    //Attach servo to pin A4
     myServo.attach(A4);
     
-    // Initialize motor speed
+    //Initialize motor speed
     analogWrite(enA, Speed); // Motor 1 speed
     analogWrite(enB, Speed); // Motor 2 speed
     
-    // Initial servo sweep for calibration
+    //Initial servo sweep for calibration
     for (int angle = 90; angle <= 140; angle += 5) {
         myServo.write(angle);
         delay(50);
@@ -55,14 +55,14 @@ void setup() {
         delay(50);
     }
 
-    // Set sensor baseline values
+    //Set sensor baseline values
     baselineR = analogRead(ir_R);
     baselineF = analogRead(ir_F);
     baselineL = analogRead(ir_L);
 }
 
 void loop() {
-    // Read sensor values
+    //Read sensor values
     s1 = analogRead(ir_R);
     s2 = analogRead(ir_F);
     s3 = analogRead(ir_L);
@@ -74,21 +74,21 @@ void loop() {
     Serial.print("\t");
     Serial.println(s3);
     
-    // Control logic
+    //Control logic
     if (isFireDetected(s1, baselineR)) {
         stopMotors();
         activatePump();
-        aimServo(40); // Right side
+        aimServo(40); //Right side
     } 
     else if (isFireDetected(s2, baselineF)) {
         stopMotors();
         activatePump();
-        aimServo(90); // Front
+        aimServo(90); //Front
     } 
     else if (isFireDetected(s3, baselineL)) {
         stopMotors();
         activatePump();
-        aimServo(140); // Left side
+        aimServo(140); //left side
     } 
     else if (s1 >= baselineR + 50 && s1 <= 700) {
         digitalWrite(pump, LOW);
@@ -113,7 +113,7 @@ void loop() {
         stopMotors();
     }
 
-    delay(50); // Small delay for loop stability
+    delay(50); //small delay for loop stability
 }
 
 bool isFireDetected(int sensorValue, int baseline) {
@@ -122,44 +122,44 @@ bool isFireDetected(int sensorValue, int baseline) {
 
 void activatePump() {
     digitalWrite(pump, HIGH);
-    delay(3000); // Run pump for 3 seconds
+    delay(3000); //Run pump for 3 seconds
     digitalWrite(pump, LOW);
 }
 
 void aimServo(int angle) {
-    myServo.write(angle); // Move servo to the specified angle
-    delay(500); // Wait for the servo to reach the position
+    myServo.write(angle); //Move servo to the specified angle
+    delay(500); //Wait for the servo to reach the position
 }
 
 void moveForward() {
-    digitalWrite(in1, HIGH); // Right motor forward
-    digitalWrite(in2, LOW);  // Right motor backward
-    digitalWrite(in3, LOW);  // Left motor backward
-    digitalWrite(in4, HIGH); // Left motor forward
+    digitalWrite(in1, HIGH); //Right motor forward
+    digitalWrite(in2, LOW);  //Right motor backward
+    digitalWrite(in3, LOW);  //Left motor backward
+    digitalWrite(in4, HIGH); //Left motor forward
     delay(10);
 }
 
 void moveBackward() {
-    digitalWrite(in1, LOW);  // Right motor forward
-    digitalWrite(in2, HIGH); // Right motor backward
-    digitalWrite(in3, HIGH); // Left motor backward
-    digitalWrite(in4, LOW);  // Left motor forward
+    digitalWrite(in1, LOW);  //Right motor forward
+    digitalWrite(in2, HIGH); //Right motor backward
+    digitalWrite(in3, HIGH); //Left motor backward
+    digitalWrite(in4, LOW);  //Left motor forward
     delay(10);
 }
 
 void turnRight() {
-    digitalWrite(in1, LOW);  // Right motor forward
-    digitalWrite(in2, HIGH); // Right motor backward
-    digitalWrite(in3, LOW);  // Left motor backward
-    digitalWrite(in4, HIGH); // Left motor forward
+    digitalWrite(in1, LOW);  //Right motor forward
+    digitalWrite(in2, HIGH); //Right motor backward
+    digitalWrite(in3, LOW);  //Left motor backward
+    digitalWrite(in4, HIGH); //Left motor forward
     delay(10);
 }
 
 void turnLeft() {
-    digitalWrite(in1, HIGH); // Right motor forward
-    digitalWrite(in2, LOW);  // Right motor backward
-    digitalWrite(in3, HIGH); // Left motor backward
-    digitalWrite(in4, LOW);  // Left motor forward
+    digitalWrite(in1, HIGH); //Right motor forward
+    digitalWrite(in2, LOW);  //Right motor backward
+    digitalWrite(in3, HIGH); //Left motor backward
+    digitalWrite(in4, LOW);  //Left motor forward
     delay(10);
 }
 
