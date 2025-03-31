@@ -1,0 +1,1 @@
+This is a group project done at UCF with a team of 4 people to build an autonomous fire fighting robot. Above is the source code in C++ that we used with our Arduino Rev3 to accomplish the task of creating a fire fighting robot.
